@@ -3,33 +3,33 @@ import React, { useState } from 'react';
 const AddRecipeForm = ({ onAddRecipe }) => {
   const [title, setTitle] = useState('');
   const [ingredients, setIngredients] = useState('');
-  const [instructions, setInstructions] = useState('');
+  const [steps, setSteps] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validation: Ensure all fields are filled
-    if (!title || !ingredients || !instructions) {
+    // ✅ Validation: Ensure all fields are filled
+    if (!title || !ingredients || !steps) {
       setError('All fields are required!');
       return;
     }
 
-    // Create a new recipe object
+    // ✅ Create a new recipe object
     const newRecipe = {
-      id: Date.now(), // Unique ID for now
+      id: Date.now(),
       title,
-      ingredients: ingredients.split(',').map((item) => item.trim()), // Convert comma-separated ingredients into an array
-      instructions,
+      ingredients: ingredients.split(',').map((item) => item.trim()), // Convert comma-separated values to array
+      steps,
       image: 'https://via.placeholder.com/150', // Placeholder image
     };
 
     onAddRecipe(newRecipe); // Pass new recipe to parent component
 
-    // Clear form
+    // ✅ Clear form
     setTitle('');
     setIngredients('');
-    setInstructions('');
+    setSteps('');
     setError('');
   };
 
@@ -39,13 +39,13 @@ const AddRecipeForm = ({ onAddRecipe }) => {
 
       {error && <p className="text-red-500 mb-3">{error}</p>}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Recipe Title */}
-        <div className="mb-4">
+        <div>
           <label className="block font-medium">Recipe Title:</label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
+            className="w-full p-2 border border-gray-300 rounded mt-1 focus:ring focus:ring-blue-300"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter recipe title"
@@ -53,24 +53,24 @@ const AddRecipeForm = ({ onAddRecipe }) => {
         </div>
 
         {/* Ingredients */}
-        <div className="mb-4">
+        <div>
           <label className="block font-medium">Ingredients (comma-separated):</label>
           <textarea
-            className="w-full p-2 border border-gray-300 rounded mt-1"
+            className="w-full p-2 border border-gray-300 rounded mt-1 focus:ring focus:ring-blue-300"
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
             placeholder="Enter ingredients separated by commas"
           />
         </div>
 
-        {/* Instructions */}
-        <div className="mb-4">
-          <label className="block font-medium">Instructions:</label>
+        {/* Cooking Steps (Updated from "instructions" to "steps") */}
+        <div>
+          <label className="block font-medium">Steps:</label>
           <textarea
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
-            placeholder="Enter cooking instructions"
+            className="w-full p-2 border border-gray-300 rounded mt-1 focus:ring focus:ring-blue-300"
+            value={steps}
+            onChange={(e) => setSteps(e.target.value)}
+            placeholder="Enter cooking steps"
           />
         </div>
 
