@@ -4,40 +4,45 @@ const AddRecipeForm = ({ onAddRecipe }) => {
   const [title, setTitle] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [steps, setSteps] = useState('');
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({}); // ✅ Add errors state
+
+  // ✅ Validation function
+  const validate = () => {
+    let newErrors = {};
+
+    if (!title.trim()) newErrors.title = 'Title is required';
+    if (!ingredients.trim()) newErrors.ingredients = 'Ingredients are required';
+    if (!steps.trim()) newErrors.steps = 'Steps are required';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // ✅ Validation: Ensure all fields are filled
-    if (!title || !ingredients || !steps) {
-      setError('All fields are required!');
-      return;
-    }
+    if (!validate()) return; // ✅ Run validation before submitting
 
-    // ✅ Create a new recipe object
     const newRecipe = {
       id: Date.now(),
       title,
-      ingredients: ingredients.split(',').map((item) => item.trim()), // Convert comma-separated values to array
+      ingredients: ingredients.split(',').map((item) => item.trim()), // Convert to array
       steps,
       image: 'https://via.placeholder.com/150', // Placeholder image
     };
 
-    onAddRecipe(newRecipe); // Pass new recipe to parent component
+    onAddRecipe(newRecipe); // Add new recipe
 
-    // ✅ Clear form
+    // ✅ Clear form fields
     setTitle('');
     setIngredients('');
     setSteps('');
-    setError('');
+    setErrors({});
   };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Add a New Recipe</h2>
-
-      {error && <p className="text-red-500 mb-3">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Recipe Title */}
@@ -50,6 +55,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter recipe title"
           />
+          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
 
         {/* Ingredients */}
@@ -61,9 +67,10 @@ const AddRecipeForm = ({ onAddRecipe }) => {
             onChange={(e) => setIngredients(e.target.value)}
             placeholder="Enter ingredients separated by commas"
           />
+          {errors.ingredients && <p className="text-red-500 text-sm">{errors.ingredients}</p>}
         </div>
 
-        {/* Cooking Steps (Updated from "instructions" to "steps") */}
+        {/* Cooking Steps */}
         <div>
           <label className="block font-medium">Steps:</label>
           <textarea
@@ -72,6 +79,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
             onChange={(e) => setSteps(e.target.value)}
             placeholder="Enter cooking steps"
           />
+          {errors.steps && <p className="text-red-500 text-sm">{errors.steps}</p>}
         </div>
 
         {/* Submit Button */}
@@ -87,3 +95,4 @@ const AddRecipeForm = ({ onAddRecipe }) => {
 };
 
 export default AddRecipeForm;
+
