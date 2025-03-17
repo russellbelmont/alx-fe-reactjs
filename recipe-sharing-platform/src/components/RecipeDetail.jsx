@@ -7,17 +7,25 @@ const RecipeDetail = () => {
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    const selectedRecipe = data.find((recipe) => recipe.id === parseInt(id));
-    setRecipe(selectedRecipe);
+    const recipeDetail = data.find((item) => item.id === parseInt(id));
+    setRecipe(recipeDetail);
   }, [id]);
 
   if (!recipe) return <div>Loading...</div>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">{recipe.title}</h1>
-      <img src={recipe.image} alt={recipe.title} className="w-full h-64 object-cover rounded-lg" />
-      <p className="text-gray-700 mt-4">{recipe.summary}</p>
+    <div className="max-w-3xl mx-auto p-6">
+      <img src={recipe.image} alt={recipe.title} className="w-full h-80 object-cover rounded-lg" />
+      <h1 className="text-3xl font-bold mt-6">{recipe.title}</h1>
+      <p className="text-lg text-gray-600 mt-4">{recipe.summary}</p>
+      <h2 className="text-2xl font-semibold mt-6">Ingredients</h2>
+      <ul className="list-disc pl-6">
+        <li>Ingredient 1</li>
+        <li>Ingredient 2</li>
+        {/* Add other ingredients */}
+      </ul>
+      <h2 className="text-2xl font-semibold mt-6">Cooking Instructions</h2>
+      <p className="text-lg">{/* Add cooking steps */}</p>
     </div>
   );
 };
